@@ -1,0 +1,104 @@
+---
+title: "food_delivery"
+author: "Chenzhi Pan (U22040372)"
+date: "4/24/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(data.table)
+library(lfe)
+library(fixest)
+library(broom)
+data = fread('food_delivery_test_r.csv')
+treatment = fread('Treatment.csv')
+control = fread('Control.csv')
+```
+
+```{r}
+questions = data.table(
+  Number = c("Q1","Q2","Q3","Q4","Q6"),
+  Question = c("What is your age?","What is your gender?","Are you a student?","Do you currently work/study from home?","How often do you order delivery?")
+)
+```
+
+
+```{r}
+head(data)
+```
+
+# Pre-Experiment Randomization Check
+First of all, we would like to check if the randomization in our experiment had done correctly. By running a series of regression on participants background information such as age, gender, whether they are students or not and frequency of ordering delivery between treatment group and control groups to check if the groups were randomized. 
+```{r}
+# Age
+lm_age = feols(Treatment~Q1 , data = data,se='white')
+summary(lm_age)
+```
+
+```{r}
+# gender
+lm_gender = feols(Treatment~Q2 , data = data,se='white')
+summary(lm_gender)
+```
+
+```{r}
+# whether student
+lm_student = feols(Treatment~Q3 , data = data,se='white')
+summary(lm_student)
+```
+```{r}
+# whether work from home
+lm_workfromhome = feols(Treatment~Q4 , data = data,se='white')
+summary(lm_workfromhome)
+```
+
+```{r}
+# Used deliver services frequency
+lm_frequency = feols(Treatment~Q6 , data = data,se='white')
+summary(lm_frequency)
+
+```
+From above regressions we observe that none of variables are statistically significant at the 95% confidence level. It suggests that our experiment was randomized correctly. Treatment groups and control groups contain participants with similar characteristics.
+```{r}
+questions
+```
+
+
+# ATE 
+Next we would like to perform a series of regressions to take a closer look at how is the result of our experiment. First of all, we calculated average treatment effect for our experiment which is whether the range of delivery time provided affect the probability of ordering.  Since our experiment included different types of cuisine trying to minimize  differences on personal flavors, we compute the average or the probability that they will order food from five pictures we provided. 
+```{r}
+# ATE effect on probability of ordering food
+treatment_control = rbind(treatment[,.(Treatment,avg_score,Q1,Q25,Q2,Q3,Q4,Q6)],control[,.(Treatment,avg_score,Q1,Q25,Q2,Q3,Q4,Q6)])
+lm_ate = feols(avg_score~Treatment,treatment_control,se='white')
+summary(lm_ate)
+```
+Based on the result above, we observe that, in general, participants in treatment group are 12% more likely to order delivery than those in control groups. This result suggests that users are more likely to order food with small range of delivery time. In addition, p-value of 0.0399 suggests our result is statistically significant at 95% confidence level. 
+```{r}
+lm_order = feols(avg_score~Q1,treatment_control,se='white')
+summary(lm_order)
+```
+
+
+```{r}
+lm_ate_age = feols(avg_score~Treatment*Q25,treatment_control,se='white')
+summary(lm_ate_age)
+tidy(lm_ate_age)
+```
+```{r}
+summary(feols(avg_score~Treatment*Q1*Q2*Q3*Q4*Q6,treatment_control,se='white'))
+```
+
+
+
+
+
+
+
+
+
+
+
