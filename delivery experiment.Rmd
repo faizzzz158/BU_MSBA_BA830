@@ -1,0 +1,74 @@
+---
+title: "delivery exoeriment"
+author: "Yichi Zhang"
+output:
+  pdf_document: default
+  html_document: default
+---
+# Loading datasets and making transform variables
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen=1, digits=3)
+
+library(data.table)
+library(tidyverse)
+library(lfe)
+library(fixest)
+library(lubridate)
+library(stargazer)
+library(modelsummary)
+library(kableExtra)
+treat <- fread('Treatment.csv')
+control <- fread('Control.csv')
+
+# work form home indicator
+treat[, wfh := ifelse(Q4 == 'Yes', 1, 0)]
+control[, wfh := ifelse(Q4 == 'Yes', 1, 0)]
+# student indicator
+treat[, student := ifelse(Q3 == 'Yes', 1, 0)]
+control[, student := ifelse(Q3 == 'Yes', 1, 0)]
+# membership
+treat[, member := ifelse(Q9 == 'None of the above', 0, 1)]
+control[, member := ifelse(Q9 == 'None of the above', 0, 1)]
+# treatment indicator
+treat[, any_treatment := 1]
+control[, any_treatment := 0]
+# combine tables
+data <- rbind(treat, control)
+```
+
+# Balance check
+We run three regressions for balance check. The result shows that we randomized our variables well. None of the variables are statistically significant at 95% confidence level. Therefore, we can conclude that there's no significant difference between treatment and control groups among whether the participant is working from home, whether the participant is a student, and whether the participant is a member of any food delivery platform. None of these characteristics made participants more likely to be in the treatment group.
+```{r}
+# work from home check
+sample <- lm(wfh ~ any_treatment, data)
+# student check
+sample1 <- lm(student ~ any_treatment, data)
+# membership check
+sample2 <- lm(member ~ any_treatment, data)
+# combine together
+stargazer(sample, sample1, sample2, type = 'text')
+```
+
+# Data analysis
+First, we run a simple regression to analyze the main effect we are interested, whether the shorter delivery time range would affect people's ordering decisions. The following regression result shows that on average, those participants in the treatment group (has shorter delivery time range) has order rate 0.7, which is 0.131 higher than those in the control group (has longer delivery time range). However, the difference is not statistcally significant at 95% confidence level. We can dive deeper to analyze which type of food has larger effect.
+
+```{r}
+reg1 <- feols(avg_score ~ any_treatment, data = data)
+etable(reg1)
+reg2 <- feols(avg_score ~ any_treatment + wfh + student + member, data = data)
+etable(reg2)
+```
+
+From the regressions below, we can see that 
+```{r}
+reg3 <- lm(Japanese ~ any_treatment, data = data)
+reg4 <- lm(American ~ any_treatment, data = data)
+reg5 <- lm(Fast ~ any_treatment, data = data)
+reg6 <- lm(Chinese ~ any_treatment, data = data)
+reg7 <- lm(Italian ~ any_treatment, data = data)
+# combine together
+stargazer(reg3, reg4, reg5, reg6, reg7, type = 'text')
+```
+
+
