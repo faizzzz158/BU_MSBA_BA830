@@ -1,0 +1,119 @@
+---
+title: "Untitled"
+author: "Muyan Xie"
+date: "4/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+read file
+```{r}
+library(data.table)
+library(fixest)
+library(broom)
+library(ggplot2)
+data <- fread('C:/Users/94018/OneDrive/Documents/BA830/Group/Data/final_data.csv')
+```
+EDA
+```{r}
+#Age distribution
+age <- ggplot(data = data,aes(x=Q1,fill=Q1))+
+  geom_histogram(stat = 'count')+
+  ggtitle('Age Distribution')+
+  ylab('Count') + xlab('Ages')
+age
+```
+
+```{r}
+#Gender distribution
+gender <- ggplot(data = data,aes(x=Q2,fill=Q2))+
+  geom_histogram(stat = 'count')+
+  ggtitle('Gender Distribution')+
+  ylab('Count') + xlab('Genders')
+gender
+```
+```{r}
+#Cuisine distribution
+cuisine <- ggplot(data = data,aes(x=Q7,fill=Q7))+
+  geom_histogram(stat = 'count')+
+  ggtitle('Cuisine Distribution')+
+  ylab('Count') + xlab('Cuisines')
+cuisine
+```
+```{r}
+#Order frequency
+order <- ggplot(data = data,aes(x=Q6,fill=Q6))+
+  geom_histogram(stat = 'count')+
+  ggtitle('Order Frequency Distribution')+
+  ylab('Count') + xlab('Order frequencies')
+order
+```
+
+
+
+
+Randomization check
+```{r}
+data$Q2[data$Q2 == 'Male'] <- 1
+data$Q2[data$Q2 == 'Female'] <- 0
+data$Q2[data$Q2 == 'Prefer not to say'] <- ''
+ran_reg <- feols(any_treatment ~ Q2,data = data)
+etable(ran_reg)
+```
+Establish different regressions between different cuisines and treatment, see if different cuisine have different performance
+```{r}
+#For all surveys
+input = data
+Japanese <- feols(Japanese ~ any_treatment, data = input)
+etable(Japanese)
+American <- feols(American ~ any_treatment, data = input)
+etable(American)
+Fast <- feols(Fast ~ any_treatment, data = input)
+etable(Fast)
+Chinese <- feols(Chinese ~ any_treatment, data = input)
+etable(Chinese)
+Italian <- feols(Italian ~ any_treatment, data = input)
+etable(Italian)
+```
+```{r}
+#For people with higher order frequency
+highfre <- data[Q6 ==  '> 3 times a week' | data$Q6 == '2-3 times a week']
+input = highfre
+Japanese <- feols(Japanese ~ any_treatment, data = input)
+etable(Japanese)
+American <- feols(American ~ any_treatment, data = input)
+etable(American)
+Fast <- feols(Fast ~ any_treatment, data = input)
+etable(Fast)
+Chinese <- feols(Chinese ~ any_treatment, data = input)
+etable(Chinese)
+Italian <- feols(Italian ~ any_treatment, data = input)
+etable(Italian)
+```
+```{r}
+#Cuisine preference
+data$Q7[data$Q7 == 'Fastfood'] <- 'Fast'
+Chi <- data[Q7=='Chinese',.(Chinese,any_treatment)]
+setnames(Chi,'Chinese','pre')
+Jap <- data[Q7=='Japanese',.(Japanese,any_treatment)]
+setnames(Jap,'Japanese','pre')
+Ame <- data[Q7=='American',.(American,any_treatment)]
+setnames(Ame,'American','pre')
+Fa <- data[Q7=='Fast',.(Fast,any_treatment)]
+setnames(Fa,'Fast','pre')
+Ita <- data[Q7=='Italian',.(Italian,any_treatment)]
+setnames(Ita,'Italian','pre')
+preference <- do.call(rbind,list(Chi,Jap,Ame,Fa,Ita))
+```
+
+```{r}
+Pre <- feols(pre ~ any_treatment, data = preference)
+etable(Pre)
+```
+
+
+
+
