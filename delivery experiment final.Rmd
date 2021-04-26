@@ -21,25 +21,26 @@ library(kableExtra)
 library(ggplot2)
 treat <- fread('Treatment.csv')
 control <- fread('Control.csv')
-
-# work form home indicator
-treat[, wfh := ifelse(Q4 == 'Yes', 1, 0)]
-control[, wfh := ifelse(Q4 == 'Yes', 1, 0)]
-# student indicator
-treat[, student := ifelse(Q3 == 'Yes', 1, 0)]
-control[, student := ifelse(Q3 == 'Yes', 1, 0)]
-# membership
-treat[, member := ifelse(Q9 == 'None of the above', 0, 1)]
-control[, member := ifelse(Q9 == 'None of the above', 0, 1)]
 # treatment indicator
 treat[, any_treatment := 1]
 control[, any_treatment := 0]
+summary(control)
 # combine tables
-data <- rbind(treat, control)
+data <- rbind(treat, control,fill=TRUE)
+
+# order frequency 
+data[,frequency := ifelse((Q6 ==  '> 3 times a week' | data$Q6 == '2-3 times a week'),1,0)]
+# work from home 
+data[, wfh := ifelse(Q4 == 'Yes', 1, 0)]
+# student 
+data[, student := ifelse(Q3 == 'Yes', 1, 0)]
+# membership
+data[, member := ifelse(Q9 == 'None of the above', 0, 1)]
+# favor cuisine is chinese or not
+data[, chinese := ifelse(Q7 == 'Chinese',1,0)]
 ```
 
 # Method
-
 **Participants**
 To recruit the participants, we posted messages on the ‘QuestromMSBA21’ Slack channel, and we also personally messaged our friends to fill out the questionnaire. Finally, we had a total of 91 respondents from under 19 to 39. Additionally, 54 identify as female, and 36 identify as male.
 Though this sampling method was efficient, some biases emerged when we recruited only people we know. First, the sample can't be representative of people of all ages. Second, we have a disproportionate number of participants who are students since we approached a lot of classmates. This might cause the external validity of our results and makes it difficult to apply our findings to a larger population. Fortunately, by appropriately designing the randomizer in the questionnaire, we were able to randomize everyone into the control or treatment group in an attempt to avoid selection bias in the study.
@@ -56,6 +57,7 @@ sample <- lm(wfh ~ any_treatment, data)
 sample1 <- lm(student ~ any_treatment, data)
 # membership check
 sample2 <- lm(member ~ any_treatment, data)
+
 # combine together
 stargazer(sample, sample1, sample2, type = 'text')
 ```
@@ -67,16 +69,24 @@ Next, we simulated two interfaces. For the treated group, the participant would 
 
 Finally, we asked the individual to provide the reasons if he/she chose unwilling to place an order in the previous questions. We would like to collect the potential reasons that might lead to participants' decisions and examine if the results could support our hypothesis.
 
+```{r}
+# variable questions table 
+questions = data.table(
+  variables = c("'member'","'student'","'wfh'","'frequency'","'chinese'"),
+  Question = c("Are you a member of any food delivery platforms?","Are you a student?","Do you currently work/study from home?","How often do you order delivery?","What's your favorite cuisine when you order takeout/delivery?")
+)
+questions
+```
 # Data Analysis
 Next we would like to perform a series of regressions to take a closer look at how is the result of our experiment. First of all, we calculated average treatment effect for our experiment which is whether the range of delivery time provided affect the probability of ordering. Since our experiment included different types of cuisine trying to minimize differences on personal flavors, we compute the average or the probability that they will order food from five pictures we provided. 
 Based on the result below, we observe that, in general, participants in treatment group are 13% more likely to order delivery than those in control groups. This result suggests that users are more likely to order food with small range of delivery time. In addition, p-value of 0.03 suggests our result is statistically significant at 95% confidence level. 
 ```{r}
-reg1 <- feols(avg_score ~ any_treatment, data = data)
+reg1 <- feols(avg_score ~ any_treatment, data = data,se="white")
 etable(reg1)
 ```
 Then, we added those variables from balance check as controls. However, they did not reduce variance in estimation. 
 ```{r}
-reg2 <- feols(avg_score ~ any_treatment + wfh + student + member, data = data)
+reg2 <- feols(avg_score ~ any_treatment + wfh + student + member, data = data, se='white')
 etable(reg2)
 ```
 Then, we dive deeper into the restaurants. We would like to explore how does the delivery time range affect people's ordering decisions by restaurants' categories. From the regressions below, we use all 91 participants data. We can see that for Fast Food and Italian Food (which is a pizzeria in our survey), the difference between treatment group (shorter delivery time range) and control group (longer delivery time range) is statistically significant. The result implies that people who order from a fast food restaurant or a pizzeria are more time sensitive. They want their delivery time range as short as possible. 
@@ -89,17 +99,27 @@ reg6 <- lm(Chinese ~ any_treatment, data = data)
 reg7 <- lm(Italian ~ any_treatment, data = data)
 stargazer(reg3, reg4, reg5, reg6, reg7, type = 'text')
 ```
-We want to take a close look at people who order food more frequently. From the regression we notice that the difference between treatment group and control group for Chinese Food become statistically significant. One reasonable explanation would be part of our participants located in China, and delivery time range in China is quit short. Therefor, those part of people are more likely to order when the delivery time range is short. People who ordered food frequently are very time sensitive. They do not want to wait for a long time.
+
+
+```{r}
+#Chinese vs nonchinese
+reg8 <- feols(avg_score~any_treatment*chinese,data,se='white')
+etable(reg1,reg8)
+```
+
+
+We want to take a close look at people who order food more frequently. From the regression we notice that the difference between treatment group and control group for Chinese Food become statistically significant. One reasonable explanation would be part of our participants located in China, and delivery time range in China is quit short. Therefore, those part of people are more likely to order when the delivery time range is short. People who ordered food frequently are very time sensitive. They do not want to wait for a long time.
 ```{r, warning=False}
 #For people with higher order frequency
-highfre <- data[Q6 ==  '> 3 times a week' | data$Q6 == '2-3 times a week']
-input = highfre
-Japanese <- lm(Japanese ~ any_treatment, data = input)
-American <- lm(American ~ any_treatment, data = input)
-Fast <- lm(Fast ~ any_treatment, data = input)
-Chinese <- lm(Chinese ~ any_treatment, data = input)
-Italian <- lm(Italian ~ any_treatment, data = input)
-stargazer(Japanese, American, Fast, Chinese, Italian, type = 'text')
+reg9 <- feols(avg_score~any_treatment*frequency,data,se='white')
+etable(reg1,reg9)
+#input = highfre 
+#Japanese <- lm(Japanese ~ any_treatment, data = input)
+#American <- lm(American ~ any_treatment, data = input)
+#Fast <- lm(Fast ~ any_treatment, data = input)
+#Chinese <- lm(Chinese ~ any_treatment, data = input)
+#Italian <- lm(Italian ~ any_treatment, data = input)
+#stargazer(Japanese, American, Fast, Chinese, Italian, type = 'text')
 ```
 
 

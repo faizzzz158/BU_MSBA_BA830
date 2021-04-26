@@ -1,0 +1,47 @@
+,Duration (in seconds),LocationLatitude,LocationLongitude,Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q15,Q17,Q18,Q19,Q19.1,Q25,Q25_2_TEXT,Q27,Q27_3_TEXT,avg_score
+0,97,42.33880615234375,-71.072601318359375,20 - 29,Female,Yes,Yes,Yes,Once a week,Chinese,"Uber Eats,DoorDash,GrubHub,Chowbus,Other",Other,1,1,1,1,1,Yes,,,,1.0
+2,154,42.3737030029296875,-71.1284027099609375,20 - 29,Female,Yes,Yes,Yes,Less than once a week,Mexican,"Uber Eats,DoorDash,GrubHub",Uber Eats,0,0,1,0,1,"If No, please specify the reasons",I already ordered an hour back :P,"The food doesn't look appealing.,Other",Vegetarian,0.4
+4,123,42.376800537109375,-71.06109619140625,20 - 29,Male,Yes,Yes,Yes,> 3 times a week,American,"Uber Eats,GrubHub,Postmates",Uber Eats,0,1,1,1,1,Yes,,The food doesn't look appealing.,,0.8
+7,157,38.8578948974609375,-77.06020355224609375,20 - 29,Male,Yes,Yes,Yes,> 3 times a week,Chinese,"Uber Eats,DoorDash,GrubHub,Chowbus","Uber Eats,Chowbus",1,1,1,1,0,"If No, please specify the reasons",Not hungry at all.,The food doesn't look appealing.,,0.8
+8,60,38.9521942138671875,-77.025299072265625,20 - 29,Female,Yes,Yes,Yes,Once a week,Chinese,Chowbus,Uber Eats,1,0,0,1,0,"If No, please specify the reasons",,The uncertainty of delivery time.,,0.4
+9,122,31.054901123046875,121.34930419921875,20 - 29,Male,No,No,Yes,> 3 times a week,Chinese,Other,None of the above,1,0,1,1,1,Yes,,The food doesn't look appealing.,,0.8
+12,73,50.916900634765625,-1.4219970703125,20 - 29,Male,Yes,Yes,Yes,Once a week,Chinese,Uber Eats,Uber Eats,1,1,1,1,1,Yes,,,,1.0
+14,337,38.9521942138671875,-77.025299072265625,20 - 29,Female,Yes,Yes,Yes,2-3 times a week,Chinese,"Uber Eats,Other",Chowbus,1,1,1,1,1,"If No, please specify the reasons",just eat,The uncertainty of delivery time.,,1.0
+16,41,40.7682952880859375,-73.98020172119140625,20 - 29,Male,Yes,Yes,Yes,> 3 times a week,Chinese,Chowbus,Chowbus,1,1,1,1,1,Yes,,,,1.0
+17,261,42.4279937744140625,-71.061798095703125,20 - 29,Female,Yes,Yes,Yes,2-3 times a week,Chinese,"Uber Eats,Chowbus",None of the above,1,0,1,1,0,"If No, please specify the reasons",My boyfriend（Chenzhi Pan） is preparing dinner for me.,Other,no why,0.6
+19,42,40.7682952880859375,-73.98020172119140625,<= 19,Female,Yes,Yes,Yes,> 3 times a week,Chinese,"Uber Eats,GrubHub,Chowbus",None of the above,1,1,1,1,1,Yes,,,,1.0
+22,1023,40.7364044189453125,-73.86949920654296875,30 - 39,Female,Yes,Yes,Yes,Once a week,Chinese,"Uber Eats,DoorDash,GrubHub,Chowbus","Uber Eats,DoorDash,GrubHub",1,0,1,0,0,Yes,,The uncertainty of delivery time.,,0.4
+24,71,38.8578948974609375,-77.06020355224609375,20 - 29,Female,Yes,Yes,Yes,> 3 times a week,Chinese,"Uber Eats,Chowbus,Other","Uber Eats,Chowbus",0,0,0,1,0,"If No, please specify the reasons",,The food doesn't look appealing.,,0.2
+25,173,38.8892059326171875,-76.94170379638671875,20 - 29,Female,Yes,Yes,Yes,Less than once a week,Chinese,Chowbus,None of the above,1,1,0,1,0,"If No, please specify the reasons",Not hungry yet ,The food doesn't look appealing.,,0.6
+29,421,31.054901123046875,121.34930419921875,30 - 39,Female,No,No,Yes,Once a week,Chinese,Other,None of the above,1,1,0,1,0,"If No, please specify the reasons",,Other,,0.6
+30,90,1.30780029296875,103.681793212890625,20 - 29,Male,Yes,Yes,Yes,2-3 times a week,Chinese,Other,None of the above,1,1,1,1,0,Yes,,,,0.8
+32,174,42.3634033203125,-71.07129669189453125,20 - 29,Male,Yes,Yes,Yes,> 3 times a week,American,"Uber Eats,GrubHub",Uber Eats,1,0,1,1,1,Yes,,The food doesn't look appealing.,,0.8
+34,215,42.366302490234375,-71.0569000244140625,20 - 29,Female,Yes,Yes,Yes,> 3 times a week,Chinese,"Uber Eats,DoorDash,GrubHub,Postmates,Chowbus",Chowbus,1,1,1,1,0,Yes,,The food doesn't look appealing.,,0.8
+36,199,31.054901123046875,121.34930419921875,30 - 39,Female,No,Yes,Yes,> 3 times a week,Fastfood,Uber Eats,Uber Eats,1,0,1,1,1,Yes,,The food doesn't look appealing.,,0.8
+40,211,42.07550048828125,-76.00890350341796875,20 - 29,Female,Yes,Yes,Yes,2-3 times a week,Chinese,"Uber Eats,GrubHub,Chowbus","GrubHub,Chowbus",1,0,0,1,0,Yes,,The food doesn't look appealing.,,0.4
+41,66,22.2794952392578125,114.14599609375,20 - 29,Male,Yes,Yes,Yes,2-3 times a week,Chinese,Other,None of the above,0,1,1,1,1,Yes,,The food doesn't look appealing.,,0.8
+42,305,24.47979736328125,118.0819091796875,20 - 29,Male,Yes,Yes,Yes,> 3 times a week,Chinese,Chowbus,"Uber Eats,Chowbus",1,1,1,1,1,Yes,,,,1.0
+43,120,32.06170654296875,118.777801513671875,20 - 29,Male,Yes,Yes,Yes,> 3 times a week,Chinese,"Uber Eats,DoorDash,Chowbus,Other",None of the above,1,0,1,1,0,Yes,,The food doesn't look appealing.,,0.6
+44,66,22.533294677734375,114.13330078125,20 - 29,Female,Yes,Yes,Yes,> 3 times a week,Chinese,Postmates,GrubHub,1,1,1,1,1,Yes,,The food doesn't look appealing.,,1.0
+47,119,31.054901123046875,121.34930419921875,20 - 29,Female,Yes,Yes,Yes,> 3 times a week,Chinese,"Uber Eats,Chowbus",Chowbus,1,1,1,1,1,"If No, please specify the reasons",i am in China,Other,I am still in China,1.0
+49,94,39.928497314453125,116.385009765625,20 - 29,Male,Yes,Yes,Yes,2-3 times a week,Chinese,"Uber Eats,DoorDash,GrubHub,Postmates",None of the above,1,0,1,1,1,Yes,,,,0.8
+52,128,51.2798004150390625,1.0496063232421875,20 - 29,Male,Yes,Yes,No,,,,,1,0,1,0,1,"If No, please specify the reasons","i prefer to have chinese food, and also i am good at cooking",The uncertainty of delivery time.,,0.6
+54,77,39.928497314453125,116.385009765625,20 - 29,Female,Yes,Yes,Yes,2-3 times a week,Chinese,"Uber Eats,GrubHub","Uber Eats,GrubHub",1,0,1,1,1,Yes,,,,0.8
+56,93,41.848297119140625,-87.651702880859375,20 - 29,Male,Yes,Yes,Yes,2-3 times a week,Chinese,"DoorDash,Other",DoorDash,1,1,1,1,1,Yes,,,,1.0
+57,80,39.928497314453125,116.385009765625,20 - 29,Female,Yes,Yes,Yes,2-3 times a week,Chinese,"Uber Eats,DoorDash,Chowbus",Chowbus,1,1,1,1,1,Yes,,Other,,1.0
+60,83,40.44439697265625,-86.92559814453125,20 - 29,Female,Yes,Yes,Yes,Less than once a week,Chinese,Chowbus,None of the above,1,1,1,1,1,"If No, please specify the reasons",Already have plan,Other,Already have lunch plan ,1.0
+62,173,42.3513946533203125,-71.0420989990234375,20 - 29,Male,Yes,Yes,Yes,2-3 times a week,Mexican,"Uber Eats,Postmates","Uber Eats,Postmates",0,1,1,1,0,Yes,,The food doesn't look appealing.,,0.6
+65,144,42.33990478515625,-71.1244964599609375,20 - 29,Male,Yes,Yes,Yes,2-3 times a week,Chinese,"Uber Eats,Chowbus","Uber Eats,Chowbus",1,0,0,1,0,Yes,,The food doesn't look appealing.,,0.4
+66,414,42.346405029296875,-71.097503662109375,20 - 29,Male,Yes,Yes,Yes,Less than once a week,Other,Uber Eats,Uber Eats,1,0,0,1,1,"If No, please specify the reasons",Not hungry! ,The food doesn't look appealing.,,0.6
+68,113,31.054901123046875,121.34930419921875,30 - 39,Female,No,No,Yes,> 3 times a week,Mexican,GrubHub,GrubHub,1,1,1,1,1,Yes,,The food doesn't look appealing.,,1.0
+71,100,53.5496063232421875,-2.2958984375,30 - 39,Female,No,No,Yes,Once a week,Chinese,Uber Eats,None of the above,1,0,1,1,0,"If No, please specify the reasons",,The food doesn't look appealing.,,0.6
+72,316,23.0037994384765625,113.23260498046875,20 - 29,Female,Yes,Yes,Yes,2-3 times a week,Chinese,Chowbus,"Uber Eats,DoorDash,Postmates,Chowbus,Other",1,1,0,1,0,Yes,,,,0.6
+75,99,42.3426971435546875,-71.09220123291015625,20 - 29,Female,Yes,Yes,Yes,Once a week,Mexican,"Uber Eats,GrubHub",Uber Eats,0,0,0,0,0,"If No, please specify the reasons",not hungry,The food doesn't look appealing.,,0.0
+76,96,42.3267974853515625,-71.13410186767578125,20 - 29,Female,Yes,Yes,Yes,2-3 times a week,Chinese,"Uber Eats,DoorDash,GrubHub","DoorDash,GrubHub",1,1,1,0,0,Yes,,,,0.6
+78,68,42.336395263671875,-71.03260040283203125,20 - 29,Male,Yes,Yes,Yes,> 3 times a week,Chinese,Uber Eats,Uber Eats,0,1,0,1,1,Yes,,,,0.6
+79,55,40.7252044677734375,-73.944000244140625,20 - 29,Female,Yes,Yes,Yes,2-3 times a week,Chinese,"Uber Eats,DoorDash,GrubHub,Postmates,Chowbus",DoorDash,1,0,1,1,1,Yes,,,,0.8
+82,59,40.75030517578125,-74.00140380859375,20 - 29,Female,Yes,Yes,Yes,2-3 times a week,Chinese,"Uber Eats,Postmates,Chowbus,Other",Chowbus,1,0,1,1,1,"If No, please specify the reasons",just finished,,,0.8
+84,118,40.71820068359375,-74.04759979248046875,20 - 29,Female,Yes,Yes,Yes,> 3 times a week,Japanese,"Uber Eats,DoorDash,Chowbus,Other",Chowbus,0,0,1,1,0,"If No, please specify the reasons",Not hungry. ,The food doesn't look appealing.,,0.4
+86,193,40.6739959716796875,-73.97010040283203125,20 - 29,Female,Yes,Yes,Yes,Once a week,Other,"Uber Eats,GrubHub,Seamless,Chowbus,Other",Chowbus,1,0,0,0,0,Yes,,"The food doesn't look appealing.,Other",I chose No for those that looked a bit too oily,0.2
+89,77,36.0229034423828125,-78.94640350341796875,20 - 29,Female,Yes,Yes,Yes,> 3 times a week,Mexican,Uber Eats,Uber Eats,1,1,0,0,1,Yes,,The food doesn't look appealing.,,0.6
+90,107,42.05499267578125,-87.695098876953125,20 - 29,Female,Yes,Yes,Yes,Once a week,Japanese,"Uber Eats,DoorDash,GrubHub,Seamless,Chowbus","Uber Eats,GrubHub,Seamless,Chowbus",1,0,1,1,1,"If No, please specify the reasons",not hungry,,,0.8
