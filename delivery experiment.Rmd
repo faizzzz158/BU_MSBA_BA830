@@ -1,6 +1,6 @@
 ---
-title: "delivery exoeriment"
-author: "Yichi Zhang"
+title: "delivery time experiment"
+author: "Yulong Gong, Tzuhua Huang, Chenzhi Pan, Muyan Xie, Yichi Zhang, Yangyang Zhou"
 output:
   pdf_document: default
   html_document: default
@@ -18,6 +18,7 @@ library(lubridate)
 library(stargazer)
 library(modelsummary)
 library(kableExtra)
+library(ggplot2)
 treat <- fread('Treatment.csv')
 control <- fread('Control.csv')
 
@@ -37,9 +38,18 @@ control[, any_treatment := 0]
 data <- rbind(treat, control)
 ```
 
-# Balance check
+# Method
+
+**Participants**
+To recruit the participants, we posted messages on the ‘QuestromMSBA21’ Slack channel, and we also personally messaged our friends to fill out the questionnaire. Finally, we had a total of 91 respondents from under 19 to 39. Additionally, 54 identify as female, and 36 identify as male.
+Though this sampling method was efficient, some biases emerged when we recruited only people we know. First, the sample can't be representative of people of all ages. Second, we have a disproportionate number of participants who are students since we approached a lot of classmates. This might cause the external validity of our results and makes it difficult to apply our findings to a larger population. Fortunately, by appropriately designing the randomizer in the questionnaire, we were able to randomize everyone into the control or treatment group in an attempt to avoid selection bias in the study.
+
+**Randomization**
+To decide which participants would be in the treatment or control group, we decided to use the built-in function in Qualtrics, a survey design platform. By setting automatic randomization, the questionnaire would randomly present one of the interfaces to the individual. The participants will be evenly presented with one of the interfaces.
+
+**Pre-Experiment Randomization/Balance Check**
 We run three regressions for balance check. The result shows that we randomized our variables well. None of the variables are statistically significant at 95% confidence level. Therefore, we can conclude that there's no significant difference between treatment and control groups among whether the participant is working from home, whether the participant is a student, and whether the participant is a member of any food delivery platform. None of these characteristics made participants more likely to be in the treatment group.
-```{r}
+```{r, warning=FALSE}
 # work from home check
 sample <- lm(wfh ~ any_treatment, data)
 # student check
@@ -50,25 +60,105 @@ sample2 <- lm(member ~ any_treatment, data)
 stargazer(sample, sample1, sample2, type = 'text')
 ```
 
-# Data analysis
-First, we run a simple regression to analyze the main effect we are interested, whether the shorter delivery time range would affect people's ordering decisions. The following regression result shows that on average, those participants in the treatment group (has shorter delivery time range) has order rate 0.7, which is 0.131 higher than those in the control group (has longer delivery time range). However, the difference is not statistcally significant at 95% confidence level. We can dive deeper to analyze which type of food has larger effect.
+**Questionnaire Design**
+For the questionnaire, first, we collected basic personal information, including age and gender, and we would like to know if the participant is a student and if he/she is working/studying from home. Second, we asked the participants' behavior of using food delivery service. For example, we would like to know the frequency of an individual orders food delivery, their preference of food category, the most frequently used food delivery service provider, and if a member of any of food delivery services. 
 
+Next, we simulated two interfaces. For the treated group, the participant would see the ordering page with the delivery time interval of 10 minutes (e.g., Your food will be delivered between 7:00 pm -7:10 pm); while the control group will see the same restaurant as the treatment group. The only difference would be the delivery time interval is greater than 30 minutes (e.g., Your food will be delivered between 7:00 pm – 7:40 pm). We also provided the options across different food categories, so we could eliminate the impact of food categories on participants' decision-making as much as possible. In each question, the participant should decide if he/she would like to place an order according to the picture and the information we provided. 
+
+Finally, we asked the individual to provide the reasons if he/she chose unwilling to place an order in the previous questions. We would like to collect the potential reasons that might lead to participants' decisions and examine if the results could support our hypothesis.
+
+# Data Analysis
+Next we would like to perform a series of regressions to take a closer look at how is the result of our experiment. First of all, we calculated average treatment effect for our experiment which is whether the range of delivery time provided affect the probability of ordering. Since our experiment included different types of cuisine trying to minimize differences on personal flavors, we compute the average or the probability that they will order food from five pictures we provided. 
+Based on the result below, we observe that, in general, participants in treatment group are 13% more likely to order delivery than those in control groups. This result suggests that users are more likely to order food with small range of delivery time. In addition, p-value of 0.03 suggests our result is statistically significant at 95% confidence level. 
 ```{r}
 reg1 <- feols(avg_score ~ any_treatment, data = data)
 etable(reg1)
+```
+Then, we added those variables from balance check as controls. However, they did not reduce variance in estimation. 
+```{r}
 reg2 <- feols(avg_score ~ any_treatment + wfh + student + member, data = data)
 etable(reg2)
 ```
-
-From the regressions below, we can see that 
-```{r}
+Then, we dive deeper into the restaurants. We would like to explore how does the delivery time range affect people's ordering decisions by restaurants' categories. From the regressions below, we use all 91 participants data. We can see that for Fast Food and Italian Food (which is a pizzeria in our survey), the difference between treatment group (shorter delivery time range) and control group (longer delivery time range) is statistically significant. The result implies that people who order from a fast food restaurant or a pizzeria are more time sensitive. They want their delivery time range as short as possible. 
+```{r, warning=False}
+#For all surveys
 reg3 <- lm(Japanese ~ any_treatment, data = data)
 reg4 <- lm(American ~ any_treatment, data = data)
 reg5 <- lm(Fast ~ any_treatment, data = data)
 reg6 <- lm(Chinese ~ any_treatment, data = data)
 reg7 <- lm(Italian ~ any_treatment, data = data)
-# combine together
 stargazer(reg3, reg4, reg5, reg6, reg7, type = 'text')
 ```
+We want to take a close look at people who order food more frequently. From the regression we notice that the difference between treatment group and control group for Chinese Food become statistically significant. One reasonable explanation would be part of our participants located in China, and delivery time range in China is quit short. Therefor, those part of people are more likely to order when the delivery time range is short. People who ordered food frequently are very time sensitive. They do not want to wait for a long time.
+```{r, warning=False}
+#For people with higher order frequency
+highfre <- data[Q6 ==  '> 3 times a week' | data$Q6 == '2-3 times a week']
+input = highfre
+Japanese <- lm(Japanese ~ any_treatment, data = input)
+American <- lm(American ~ any_treatment, data = input)
+Fast <- lm(Fast ~ any_treatment, data = input)
+Chinese <- lm(Chinese ~ any_treatment, data = input)
+Italian <- lm(Italian ~ any_treatment, data = input)
+stargazer(Japanese, American, Fast, Chinese, Italian, type = 'text')
+```
+
+
+# EDA
+```{r}
+#Age distribution
+age <- ggplot(data = data,aes(x=Q1,fill=Q1))+
+  geom_histogram(stat = 'count')+
+  ggtitle('Age Distribution')+
+  ylab('Count') + xlab('Ages')
+age
+
+```
+
+```{r}
+#Gender distribution
+gender <- ggplot(data = data,aes(x=Q2,fill=Q2))+
+  geom_histogram(stat = 'count')+
+  ggtitle('Gender Distribution')+
+  ylab('Count') + xlab('Genders')
+gender
+```
+
+```{r}
+#Cuisine distribution
+cuisine <- ggplot(data = data,aes(x=Q7,fill=Q7))+
+  geom_histogram(stat = 'count')+
+  ggtitle('Cuisine Distribution')+
+  ylab('Count') + xlab('Cuisines')
+cuisine
+```
+```{r}
+#Order frequency
+order <- ggplot(data = data,aes(x=Q6,fill=Q6))+
+  geom_histogram(stat = 'count')+
+  ggtitle('Order Frequency Distribution')+
+  ylab('Count') + xlab('Order frequencies')
+order
+```
+
+```{r}
+#Cuisine preference
+data$Q7[data$Q7 == 'Fastfood'] <- 'Fast'
+Chi <- data[Q7=='Chinese',.(Chinese,any_treatment)]
+setnames(Chi,'Chinese','pre')
+Jap <- data[Q7=='Japanese',.(Japanese,any_treatment)]
+setnames(Jap,'Japanese','pre')
+Ame <- data[Q7=='American',.(American,any_treatment)]
+setnames(Ame,'American','pre')
+Fa <- data[Q7=='Fast',.(Fast,any_treatment)]
+setnames(Fa,'Fast','pre')
+Ita <- data[Q7=='Italian',.(Italian,any_treatment)]
+setnames(Ita,'Italian','pre')
+preference <- do.call(rbind,list(Chi,Jap,Ame,Fa,Ita))
+Pre <- feols(pre ~ any_treatment, data = preference)
+etable(Pre)
+```
+
+
+
 
 
