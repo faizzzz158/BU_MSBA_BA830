@@ -94,6 +94,23 @@ Italian <- feols(Italian ~ any_treatment, data = input)
 etable(Italian)
 ```
 ```{r}
+#For people with higher order frequency, heterogeneous
+data1 <- data
+data1$Q6[data1$Q6 ==  '> 3 times a week'] <- 1
+data1$Q6[data1$Q6 ==  '2-3 times a week'] <- 1
+data1$Q6[data1$Q6 !=  1] <- 0
+data1[,avg_score := (Japanese+American+Fast+Chinese+Italian)/5]
+input = data1
+Avg <- feols(avg_score ~ any_treatment*Q6, data = input)
+Japanese <- feols(Japanese ~ any_treatment*Q6, data = input)
+American <- feols(American ~ any_treatment*Q6, data = input)
+Fast <- feols(Fast ~ any_treatment*Q6, data = input)
+Chinese <- feols(Chinese ~ any_treatment*Q6, data = input)
+Italian <- feols(Italian ~ any_treatment*Q6, data = input)
+etable(Avg,Japanese,American,Fast,Chinese,Italian)
+```
+
+```{r}
 #Cuisine preference
 data$Q7[data$Q7 == 'Fastfood'] <- 'Fast'
 Chi <- data[Q7=='Chinese',.(Chinese,any_treatment)]
