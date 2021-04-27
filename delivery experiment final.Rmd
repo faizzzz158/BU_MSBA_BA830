@@ -6,7 +6,7 @@ output:
   html_document: default
 ---
 # Introduction
-As many pieces of research have shown, in this fast-paced society, people value the speed of delivery service. According to Parry(2016), in a study of online shopper behavior, 263 out of 558 individuals are willing to pay more just because they want to get their packages faster. Sometimes, dissatisfaction with the delivery service can lead to order cancellation or even more severe long-term effects for a company, for example, an unrecoverable consumer relationship,  for a company. 
+As many pieces of research have shown, in this fast-paced society, people value the speed of delivery service. According to the Online Ordering Statistics(Resendes,2020), 31% of customers use delivery service at least twice a week. 33% of customers are willing to pay money in exchange for delivery speed.
 
 The COVID-19 pandemic challenged our life in many aspects, for example, people are more likely to receive emails from third-party carriers informing them about the potential delay for their packages. But some industries grew fastly during this period, such as fresh delivery services. For this project, we would like to dive into the food delivery service industry. We’d like to take the standpoint of the third-party food delivery service platforms, such as Uber Eats, Chowbus, DoorDash, etc., which connect the restaurants and consumers. We want to analyze when everything holds constant, how the food delivery time interval will affect consumer’s willingness to place an order. 
 
@@ -148,18 +148,32 @@ reg7 <- feols(Italian ~ any_treatment, data = data, se='white')
 etable(reg3, reg4, reg5, reg6, reg7)
 ```
 
-
+# Chinese vs nonchinese
 ```{r}
-#Chinese vs nonchinese
 reg8 <- feols(avg_score~any_treatment*chinese,data,se='white')
 etable(reg1,reg8)
 ```
+```{r}
+cate_chinese_1 <- mean(data[chinese == 1& any_treatment == 1, avg_score])-mean(data[chinese == 1& any_treatment == 0, avg_score])
+cate_chinese_0 <- mean(data[chinese == 0& any_treatment == 1, avg_score])-mean(data[chinese == 0& any_treatment == 0, avg_score])
+cat(cate_chinese_1,cate_chinese_0)
+```
+From the above summary we could observe that , there is a small differences on probability of ordering deliver services between users who favor chinese and not. In addition, users who favor ordering Chinese cuisine concern slightly more on delivery time range.
+
+# Order Frequency
 We want to take a close look at people who order food more frequently. From the regression we notice that the difference between treatment group and control group for Chinese Food become statistically significant. One reasonable explanation would be part of our participants located in China, and delivery time range in China is quit short. Therefore, those part of people are more likely to order when the delivery time range is short. People who ordered food frequently are very time sensitive. They do not want to wait for a long time.
 ```{r}
 #For people with higher order frequency
 reg9 <- feols(avg_score~any_treatment*frequency,data,se='white')
 etable(reg1,reg9)
 ```
+```{r}
+cate_frequency_1 <- mean(data[frequency == 1& any_treatment == 1, avg_score])-mean(data[frequency == 1& any_treatment == 0, avg_score])
+cate_frequency_0 <- mean(data[frequency == 0& any_treatment == 1, avg_score])-mean(data[frequency == 0& any_treatment == 0, avg_score])
+cat(cate_frequency_1,cate_frequency_0)
+```
+Based on above summary, we can conclude that average treatment effect varies by users' previous order frequency. Users had high previous order frequency tended to pay more attention on food delivery time range. Those users were 16.4% more likely to place an order with a short range of delivery time than with a relatively long range. Users had low previous order frequency, however, didn't really seem take range of delivery time into account. 
+
 # Limitation
 Even though we tried to be as comprehensive as we could, this project still has some limitations.
 
@@ -174,12 +188,8 @@ During our data analysis process, we realize that qualtrics automatically collec
 Furthermore, we could include some questions about the average cost per order to check whether the longer individual waits, the more she/he is likely to spend. 
 
 # References:
-
 Foreit, K. G., & Foreit, J. R. (2004). Willingness to pay surveys for setting prices for reproductive health products and services a user’s manual.
-
-Parry, T. (2016, Sept 13). Delivery time influences 87% of online shoppers’ purchase decisions, Multichannel Merchant, retrieved from https://multichannelmerchant.com/must-reads/delivery-time-influences-87-online-shoppers
--purchase-decisions/#:~:text=Fast%20delivery%20and%20premium%20packaging,and%20fulfillment%20
-firm%20Dotcom%20Distribution.&text=The%20study%20found%20that%2067,deadline%2C%20such%20as%20an%20anniversary.
+Resendes,.S (2020). 26 Online ordering statistics every restaurateur should know in 2020. Upserve. Retrieved from https://upserve.com/restaurant-insider/online-ordering-statistics/
 
 
 
