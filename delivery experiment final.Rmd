@@ -12,6 +12,10 @@ The COVID-19 pandemic challenged our life in many aspects, for example, people a
 
 We wish our results could help us have a better understanding of the influence of wait time on whether a consumer would choose a service or not, which could be helpful in our career. Also, we wish our result would help food delivery service platforms to gain more profit by providing consumers with a better user experience.
 
+# Hypothesis and implications
+We assume that the more precise the delivery time interval is, the more willingly a customer will place an order. In this case, the platform should improve the accuracy of estimated delivery time or optimize the delivery time to a narrower interval.
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(scipen=1, digits=3)
