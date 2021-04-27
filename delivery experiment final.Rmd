@@ -5,7 +5,13 @@ output:
   pdf_document: default
   html_document: default
 ---
-# Loading datasets and making transform variables
+# Introduction
+As many pieces of research have shown, in this fast-paced society, people value the speed of delivery service. According to Parry(2016), in a study of online shopper behavior, 263 out of 558 individuals are willing to pay more just because they want to get their packages faster. Sometimes, dissatisfaction with the delivery service can lead to order cancellation or even more severe long-term effects for a company, for example, an unrecoverable consumer relationship,  for a company. 
+
+The COVID-19 pandemic challenged our life in many aspects, for example, people are more likely to receive emails from third-party carriers informing them about the potential delay for their packages. But some industries grew fastly during this period, such as fresh delivery services. For this project, we would like to dive into the food delivery service industry. We’d like to take the standpoint of the third-party food delivery service platforms, such as Uber Eats, Chowbus, DoorDash, etc., which connect the restaurants and consumers. We want to analyze when everything holds constant, how the food delivery time interval will affect a consumer’s willingness to place an order. 
+
+We wish our results could help us have a better understanding of the influence of wait time on whether a consumer would choose a service or not, which could be helpful in our career. Also, we wish our result would help food delivery service platforms to gain more profit by providing consumers with a better user experience.
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(scipen=1, digits=3)
@@ -41,14 +47,34 @@ data[, chinese := ifelse(Q7 == 'Chinese',1,0)]
 ```
 
 # Method
-**Participants**
-To recruit the participants, we posted messages on the ‘QuestromMSBA21’ Slack channel, and we also personally messaged our friends to fill out the questionnaire. Finally, we had a total of 91 respondents from under 19 to 39. Additionally, 54 identify as female, and 36 identify as male.
-Though this sampling method was efficient, some biases emerged when we recruited only people we know. First, the sample can't be representative of people of all ages. Second, we have a disproportionate number of participants who are students since we approached a lot of classmates. This might cause the external validity of our results and makes it difficult to apply our findings to a larger population. Fortunately, by appropriately designing the randomizer in the questionnaire, we were able to randomize everyone into the control or treatment group in an attempt to avoid selection bias in the study.
 
-**Randomization**
-To decide which participants would be in the treatment or control group, we decided to use the built-in function in Qualtrics, a survey design platform. By setting automatic randomization, the questionnaire would randomly present one of the interfaces to the individual. The participants will be evenly presented with one of the interfaces.
+**Questionnaire Design**
+
+For the questionnaire, first, we collected basic personal information, including age and gender, and we would like to know if the participant is a student or an employee for an organization and if he/she is working/studying from home. Second, we asked the participants' behavior of using food delivery service. For example, we would like to know the frequency of an individual orders food delivery, their preference of food category. We also decided to answer some questions about the previous service platform interaction recommend by K.Foreit and J.Foreit(2004) in their paper, the most frequently used food delivery service provider, and if the individual is a  prime member of any of the food delivery services. 
+
+Next, we simulated two interfaces. For the treated group, the participant would see the ordering page with the delivery time interval of 10 minutes (e.g., Your food will be delivered between 7:00 pm -7:10 pm); while the control group will see the same restaurant as the treatment group. The only difference would be the delivery time interval is greater than 30 minutes (e.g., Your food will be delivered between 7:00 pm – 7:40 pm). We also provided the options across different food categories, and we chose the same image representation so we could eliminate the impact of food categories on participants' decision-making as much as possible. In each question, the participant should decide if he/she would like to place an order according to the picture and the information we provided. 
+
+Finally, we asked the individual to provide the reasons if he/she chose unwilling to place an order in the previous questions. We would like to collect the potential reasons that might lead to participants' decisions and examine if the results could support our hypothesis.
+
+```{r}
+# variable questions table 
+questions = data.table(
+  variables = c("'member'","'student'","'wfh'","'frequency'","'chinese'"),
+  Question = c("Are you a member of any food delivery platforms?","Are you a student?","Do you currently work/study from home?","How often do you order delivery?","What's your favorite cuisine when you order takeout/delivery?")
+)
+kbl(questions)
+```
+
+
+**Participants**
+
+To decide which participants would be in the treatment or control group, we decided to use the built-in function in Qualtrics, a survey design platform. By setting automatic randomization, the questionnaire would randomly present one of the interfaces to the individual. The participants will be evenly presented with one of the interfaces. By appropriately designing the randomizer in the questionnaire, we were able to randomize everyone into the control or treatment group in an attempt to avoid selection bias in the study.
+
+To recruit the participants, we distributed our questionnaires in two ways. Firstly, we distributed it by posting messages in the ‘QuestromMSBA21’ Slack channel. Secondly, we also distributed through our social networking.  Finally, we had a total of 91 respondents from under 19 to 39. Additionally, 54 identify as female, and 36 identify as male.
+
 
 **Pre-Experiment Randomization/Balance Check**
+
 We run three regressions for balance check. The result shows that we randomized our variables well. None of the variables are statistically significant at 95% confidence level. Therefore, we can conclude that there's no significant difference between treatment and control groups among whether the participant is working from home, whether the participant is a student, and whether the participant is a member of any food delivery platform. None of these characteristics made participants more likely to be in the treatment group.
 ```{r, warning=FALSE}
 # work from home check
@@ -62,88 +88,10 @@ sample2 <- lm(member ~ any_treatment, data)
 stargazer(sample, sample1, sample2, type = 'text')
 ```
 
-**Questionnaire Design**
-For the questionnaire, first, we collected basic personal information, including age and gender, and we would like to know if the participant is a student and if he/she is working/studying from home. Second, we asked the participants' behavior of using food delivery service. For example, we would like to know the frequency of an individual orders food delivery, their preference of food category, the most frequently used food delivery service provider, and if a member of any of food delivery services. 
 
-Next, we simulated two interfaces. For the treated group, the participant would see the ordering page with the delivery time interval of 10 minutes (e.g., Your food will be delivered between 7:00 pm -7:10 pm); while the control group will see the same restaurant as the treatment group. The only difference would be the delivery time interval is greater than 30 minutes (e.g., Your food will be delivered between 7:00 pm – 7:40 pm). We also provided the options across different food categories, so we could eliminate the impact of food categories on participants' decision-making as much as possible. In each question, the participant should decide if he/she would like to place an order according to the picture and the information we provided. 
-
-Finally, we asked the individual to provide the reasons if he/she chose unwilling to place an order in the previous questions. We would like to collect the potential reasons that might lead to participants' decisions and examine if the results could support our hypothesis.
-
-```{r}
-# variable questions table 
-questions = data.table(
-  variables = c("'member'","'student'","'wfh'","'frequency'","'chinese'"),
-  Question = c("Are you a member of any food delivery platforms?","Are you a student?","Do you currently work/study from home?","How often do you order delivery?","What's your favorite cuisine when you order takeout/delivery?")
-)
-questions
-```
-# Data Analysis
-Next we would like to perform a series of regressions to take a closer look at how is the result of our experiment. First of all, we calculated average treatment effect for our experiment which is whether the range of delivery time provided affect the probability of ordering. Since our experiment included different types of cuisine trying to minimize differences on personal flavors, we compute the average or the probability that they will order food from five pictures we provided. 
-Based on the result below, we observe that, in general, participants in treatment group are 13% more likely to order delivery than those in control groups. This result suggests that users are more likely to order food with small range of delivery time. In addition, p-value of 0.03 suggests our result is statistically significant at 95% confidence level. 
-```{r}
-reg1 <- feols(avg_score ~ any_treatment, data = data,se="white")
-etable(reg1)
-```
-Then, we added those variables from balance check as controls. However, they did not reduce variance in estimation. 
-```{r}
-reg2 <- feols(avg_score ~ any_treatment + wfh + student + member, data = data, se='white')
-etable(reg2)
-```
-Then, we dive deeper into the restaurants. We would like to explore how does the delivery time range affect people's ordering decisions by restaurants' categories. From the regressions below, we use all 91 participants data. We can see that for Fast Food and Italian Food (which is a pizzeria in our survey), the difference between treatment group (shorter delivery time range) and control group (longer delivery time range) is statistically significant. The result implies that people who order from a fast food restaurant or a pizzeria are more time sensitive. They want their delivery time range as short as possible. 
-```{r, warning=False}
-#For all surveys
-reg3 <- lm(Japanese ~ any_treatment, data = data)
-reg4 <- lm(American ~ any_treatment, data = data)
-reg5 <- lm(Fast ~ any_treatment, data = data)
-reg6 <- lm(Chinese ~ any_treatment, data = data)
-reg7 <- lm(Italian ~ any_treatment, data = data)
-stargazer(reg3, reg4, reg5, reg6, reg7, type = 'text')
-```
-
-
-```{r}
-#Chinese vs nonchinese
-reg8 <- feols(avg_score~any_treatment*chinese,data,se='white')
-etable(reg1,reg8)
-```
-
-
-We want to take a close look at people who order food more frequently. From the regression we notice that the difference between treatment group and control group for Chinese Food become statistically significant. One reasonable explanation would be part of our participants located in China, and delivery time range in China is quit short. Therefore, those part of people are more likely to order when the delivery time range is short. People who ordered food frequently are very time sensitive. They do not want to wait for a long time.
-```{r, warning=False}
-#For people with higher order frequency
-reg9 <- feols(avg_score~any_treatment*frequency,data,se='white')
-etable(reg1,reg9)
-#input = highfre 
-#Japanese <- lm(Japanese ~ any_treatment, data = input)
-#American <- lm(American ~ any_treatment, data = input)
-#Fast <- lm(Fast ~ any_treatment, data = input)
-#Chinese <- lm(Chinese ~ any_treatment, data = input)
-#Italian <- lm(Italian ~ any_treatment, data = input)
-#stargazer(Japanese, American, Fast, Chinese, Italian, type = 'text')
-```
-
-
-# EDA
-```{r}
-#Age distribution
-age <- ggplot(data = data,aes(x=Q1,fill=Q1))+
-  geom_histogram(stat = 'count')+
-  ggtitle('Age Distribution')+
-  ylab('Count') + xlab('Ages')
-age
-
-```
-
-```{r}
-#Gender distribution
-gender <- ggplot(data = data,aes(x=Q2,fill=Q2))+
-  geom_histogram(stat = 'count')+
-  ggtitle('Gender Distribution')+
-  ylab('Count') + xlab('Genders')
-gender
-```
-
-```{r}
+**EDA**
+From the below graph we notice that the majority of our participants ordered Chinese food.
+```{r, warining=FALSE}
 #Cuisine distribution
 cuisine <- ggplot(data = data,aes(x=Q7,fill=Q7))+
   geom_histogram(stat = 'count')+
@@ -151,7 +99,8 @@ cuisine <- ggplot(data = data,aes(x=Q7,fill=Q7))+
   ylab('Count') + xlab('Cuisines')
 cuisine
 ```
-```{r}
+From the order frequency chart we find out that most of our participants order food from delivery apps more than 2 times a week.
+```{r, warning=FALSE}
 #Order frequency
 order <- ggplot(data = data,aes(x=Q6,fill=Q6))+
   geom_histogram(stat = 'count')+
@@ -159,6 +108,9 @@ order <- ggplot(data = data,aes(x=Q6,fill=Q6))+
   ylab('Count') + xlab('Order frequencies')
 order
 ```
+
+
+# Data Analysis
 
 ```{r}
 #Cuisine preference
@@ -177,6 +129,63 @@ preference <- do.call(rbind,list(Chi,Jap,Ame,Fa,Ita))
 Pre <- feols(pre ~ any_treatment, data = preference)
 etable(Pre)
 ```
+
+Next we would like to perform a series of regressions to take a closer look at how is the result of our experiment. First of all, we calculated average treatment effect for our experiment which is whether the range of delivery time provided affect the probability of ordering. Since our experiment included different types of cuisine trying to minimize differences on personal flavors, we compute the average or the probability that they will order food from five pictures we provided. 
+Based on the result below, we observe that, in general, participants in treatment group are 13% more likely to order delivery than those in control groups. This result suggests that users are more likely to order food with small range of delivery time. In addition, p-value of 0.03 suggests our result is statistically significant at 95% confidence level. 
+```{r}
+reg1 <- feols(avg_score ~ any_treatment, data = data,se="white")
+etable(reg1)
+```
+Then, we added those variables from balance check as controls. However, they did not reduce variance in estimation. 
+```{r}
+reg2 <- feols(avg_score ~ any_treatment + wfh + student + member, data = data, se='white')
+etable(reg2)
+```
+Then, we dive deeper into the restaurants. We would like to explore how does the delivery time range affect people's ordering decisions by restaurants' categories. From the regressions below, we use all 91 participants data. We can see that for Fast Food and Italian Food (which is a pizzeria in our survey), the difference between treatment group (shorter delivery time range) and control group (longer delivery time range) is statistically significant at 90% confidence level. The result implies that people who order from a fast food restaurant or a pizzeria are more time sensitive. They want their delivery time range as short as possible. 
+```{r}
+#For all surveys
+reg3 <- feols(Japanese ~ any_treatment, data = data, se='white')
+reg4 <- feols(American ~ any_treatment, data = data, se='white')
+reg5 <- feols(Fast ~ any_treatment, data = data, se='white')
+reg6 <- feols(Chinese ~ any_treatment, data = data, se='white')
+reg7 <- feols(Italian ~ any_treatment, data = data, se='white')
+etable(reg3, reg4, reg5, reg6, reg7)
+```
+
+
+```{r}
+#Chinese vs nonchinese
+reg8 <- feols(avg_score~any_treatment*chinese,data,se='white')
+etable(reg1,reg8)
+```
+We want to take a close look at people who order food more frequently. From the regression we notice that the difference between treatment group and control group for Chinese Food become statistically significant. One reasonable explanation would be part of our participants located in China, and delivery time range in China is quit short. Therefore, those part of people are more likely to order when the delivery time range is short. People who ordered food frequently are very time sensitive. They do not want to wait for a long time.
+```{r}
+#For people with higher order frequency
+reg9 <- feols(avg_score~any_treatment*frequency,data,se='white')
+etable(reg1,reg9)
+```
+# Limitation
+Even though we tried to be as comprehensive as we could, this project still has some limitations.
+
+To start with,  the questionnaire did not cover all possible types of diets such to be specific,  we did not consider whether the respondent is a vegetarian or not. 
+
+The combination of all order placement questions may lead to confusion which could fail to make respondents consider each question individually, and they may even didn’t notice the food type differences. Even worse,  the person may just pick favorite food cuisines and ignore the delivery time we set on purpose.
+
+Though this sampling method was efficient, some biases emerged when we recruited only people we know. First, the sample can't be representative of people of all ages. Second, we have a disproportionate number of participants who are students since we approached a lot of classmates. This might cause the external validity of our results and makes it difficult to apply our findings to a larger population. 
+
+# Further research
+During our data analysis process, we realize that qualtrics automatically collect geographical information, so if we can distribute our samples on a larger scale, we may be able to check whether there are block-wise characteristics.
+Furthermore, we could include some questions about the average cost per order to check whether the longer individual waits, the more she/he is likely to spend. 
+
+# References:
+
+Foreit, K. G., & Foreit, J. R. (2004). Willingness to pay surveys for setting prices for reproductive health products and services a user’s manual.
+
+Parry, T. (2016, Sept 13). Delivery time influences 87% of online shoppers’ purchase decisions, Multichannel Merchant, retrieved from https://multichannelmerchant.com/must-reads/delivery-time-influences-87-online-shoppers
+-purchase-decisions/#:~:text=Fast%20delivery%20and%20premium%20packaging,and%20fulfillment%20
+firm%20Dotcom%20Distribution.&text=The%20study%20found%20that%2067,deadline%2C%20such%20as%20an%20anniversary.
+
+
 
 
 
