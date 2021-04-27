@@ -8,7 +8,7 @@ output:
 # Introduction
 As many pieces of research have shown, in this fast-paced society, people value the speed of delivery service. According to Parry(2016), in a study of online shopper behavior, 263 out of 558 individuals are willing to pay more just because they want to get their packages faster. Sometimes, dissatisfaction with the delivery service can lead to order cancellation or even more severe long-term effects for a company, for example, an unrecoverable consumer relationship,  for a company. 
 
-The COVID-19 pandemic challenged our life in many aspects, for example, people are more likely to receive emails from third-party carriers informing them about the potential delay for their packages. But some industries grew fastly during this period, such as fresh delivery services. For this project, we would like to dive into the food delivery service industry. We’d like to take the standpoint of the third-party food delivery service platforms, such as Uber Eats, Chowbus, DoorDash, etc., which connect the restaurants and consumers. We want to analyze when everything holds constant, how the food delivery time interval will affect a consumer’s willingness to place an order. 
+The COVID-19 pandemic challenged our life in many aspects, for example, people are more likely to receive emails from third-party carriers informing them about the potential delay for their packages. But some industries grew fastly during this period, such as fresh delivery services. For this project, we would like to dive into the food delivery service industry. We’d like to take the standpoint of the third-party food delivery service platforms, such as Uber Eats, Chowbus, DoorDash, etc., which connect the restaurants and consumers. We want to analyze when everything holds constant, how the food delivery time interval will affect consumer’s willingness to place an order. 
 
 We wish our results could help us have a better understanding of the influence of wait time on whether a consumer would choose a service or not, which could be helpful in our career. Also, we wish our result would help food delivery service platforms to gain more profit by providing consumers with a better user experience.
 
@@ -33,7 +33,6 @@ control[, any_treatment := 0]
 summary(control)
 # combine tables
 data <- rbind(treat, control,fill=TRUE)
-
 # order frequency 
 data[,frequency := ifelse((Q6 ==  '> 3 times a week' | data$Q6 == '2-3 times a week'),1,0)]
 # work from home 
@@ -44,12 +43,15 @@ data[, student := ifelse(Q3 == 'Yes', 1, 0)]
 data[, member := ifelse(Q9 == 'None of the above', 0, 1)]
 # favor cuisine is chinese or not
 data[, chinese := ifelse(Q7 == 'Chinese',1,0)]
+
+# Select all rows with frequency and favor cuisine input
+keep <- which(data$Q6 != '')
+data <- data[keep]
 ```
 
 # Method
 
 **Questionnaire Design**
-
 For the questionnaire, first, we collected basic personal information, including age and gender, and we would like to know if the participant is a student or an employee for an organization and if he/she is working/studying from home. Second, we asked the participants' behavior of using food delivery service. For example, we would like to know the frequency of an individual orders food delivery, their preference of food category. We also decided to answer some questions about the previous service platform interaction recommend by K.Foreit and J.Foreit(2004) in their paper, the most frequently used food delivery service provider, and if the individual is a  prime member of any of the food delivery services. 
 
 Next, we simulated two interfaces. For the treated group, the participant would see the ordering page with the delivery time interval of 10 minutes (e.g., Your food will be delivered between 7:00 pm -7:10 pm); while the control group will see the same restaurant as the treatment group. The only difference would be the delivery time interval is greater than 30 minutes (e.g., Your food will be delivered between 7:00 pm – 7:40 pm). We also provided the options across different food categories, and we chose the same image representation so we could eliminate the impact of food categories on participants' decision-making as much as possible. In each question, the participant should decide if he/she would like to place an order according to the picture and the information we provided. 
@@ -59,7 +61,7 @@ Finally, we asked the individual to provide the reasons if he/she chose unwillin
 ```{r}
 # variable questions table 
 questions = data.table(
-  variables = c("'member'","'student'","'wfh'","'frequency'","'chinese'"),
+  Variables = c("'member'","'student'","'wfh'","'frequency'","'chinese'"),
   Question = c("Are you a member of any food delivery platforms?","Are you a student?","Do you currently work/study from home?","How often do you order delivery?","What's your favorite cuisine when you order takeout/delivery?")
 )
 kbl(questions)
@@ -105,14 +107,17 @@ From the order frequency chart we find out that most of our participants order f
 order <- ggplot(data = data,aes(x=Q6,fill=Q6))+
   geom_histogram(stat = 'count')+
   ggtitle('Order Frequency Distribution')+
-  ylab('Count') + xlab('Order frequencies')
+  ylab('Count') + xlab('Order frequencies') + coord_flip()
 order
 ```
 
+```{r}
+head(data)
+```
 
 # Data Analysis
-
 ```{r}
+##=======================muyan！！！！！！！！！！！！==================================================================
 #Cuisine preference
 data$Q7[data$Q7 == 'Fastfood'] <- 'Fast'
 Chi <- data[Q7=='Chinese',.(Chinese,any_treatment)]
@@ -131,7 +136,7 @@ etable(Pre)
 ```
 
 Next we would like to perform a series of regressions to take a closer look at how is the result of our experiment. First of all, we calculated average treatment effect for our experiment which is whether the range of delivery time provided affect the probability of ordering. Since our experiment included different types of cuisine trying to minimize differences on personal flavors, we compute the average or the probability that they will order food from five pictures we provided. 
-Based on the result below, we observe that, in general, participants in treatment group are 13% more likely to order delivery than those in control groups. This result suggests that users are more likely to order food with small range of delivery time. In addition, p-value of 0.03 suggests our result is statistically significant at 95% confidence level. 
+Based on the result below, we observe that, in general, participants in treatment group are 13% more likely to order delivery than those in control groups. This result suggests that users are more likely to order food with small range of delivery time. In addition, below table suggests our result is statistically significant at 95% confidence level. 
 ```{r}
 reg1 <- feols(avg_score ~ any_treatment, data = data,se="white")
 etable(reg1)
@@ -144,6 +149,7 @@ etable(reg2)
 Then, we dive deeper into the restaurants. We would like to explore how does the delivery time range affect people's ordering decisions by restaurants' categories. From the regressions below, we use all 91 participants data. We can see that for Fast Food and Italian Food (which is a pizzeria in our survey), the difference between treatment group (shorter delivery time range) and control group (longer delivery time range) is statistically significant at 90% confidence level. The result implies that people who order from a fast food restaurant or a pizzeria are more time sensitive. They want their delivery time range as short as possible. 
 ```{r}
 #For all surveys
+##===============================================MU YAN ====================================================
 reg3 <- feols(Japanese ~ any_treatment, data = data, se='white')
 reg4 <- feols(American ~ any_treatment, data = data, se='white')
 reg5 <- feols(Fast ~ any_treatment, data = data, se='white')
