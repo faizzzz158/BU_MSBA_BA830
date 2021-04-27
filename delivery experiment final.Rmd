@@ -120,26 +120,8 @@ head(data)
 ```
 
 # Data Analysis
-```{r}
-##=======================muyan！！！！！！！！！！！！==================================================================
-#Cuisine preference
-data$Q7[data$Q7 == 'Fastfood'] <- 'Fast'
-Chi <- data[Q7=='Chinese',.(Chinese,any_treatment)]
-setnames(Chi,'Chinese','pre')
-Jap <- data[Q7=='Japanese',.(Japanese,any_treatment)]
-setnames(Jap,'Japanese','pre')
-Ame <- data[Q7=='American',.(American,any_treatment)]
-setnames(Ame,'American','pre')
-Fa <- data[Q7=='Fast',.(Fast,any_treatment)]
-setnames(Fa,'Fast','pre')
-Ita <- data[Q7=='Italian',.(Italian,any_treatment)]
-setnames(Ita,'Italian','pre')
-preference <- do.call(rbind,list(Chi,Jap,Ame,Fa,Ita))
-Pre <- feols(pre ~ any_treatment, data = preference)
-etable(Pre)
-```
 
-Next we would like to perform a series of regressions to take a closer look at how is the result of our experiment. First of all, we calculated average treatment effect for our experiment which is whether the range of delivery time provided affect the probability of ordering. Since our experiment included different types of cuisine trying to minimize differences on personal flavors, we compute the average or the probability that they will order food from five pictures we provided. 
+We would like to perform a series of regressions to take a closer look at how is the result of our experiment. First of all, we calculated average treatment effect for our experiment which is whether the range of delivery time provided affect the probability of ordering. Since our experiment included different types of cuisine trying to minimize differences on personal flavors, we compute the average or the probability that they will order food from five pictures we provided. 
 Based on the result below, we observe that, in general, participants in treatment group are 13% more likely to order delivery than those in control groups. This result suggests that users are more likely to order food with small range of delivery time. In addition, below table suggests our result is statistically significant at 95% confidence level. 
 ```{r}
 reg1 <- feols(avg_score ~ any_treatment, data = data,se="white")
