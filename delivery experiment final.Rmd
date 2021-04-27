@@ -89,9 +89,13 @@ sample <- lm(wfh ~ any_treatment, data)
 sample1 <- lm(student ~ any_treatment, data)
 # membership check
 sample2 <- lm(member ~ any_treatment, data)
+# frequency check
+sample3 <- lm(frequency ~ any_treatment, data)
+# Chinese food check
+sample4 <- lm(chinese ~ any_treatment, data)
 
 # combine together
-stargazer(sample, sample1, sample2, type = 'text')
+stargazer(sample, sample1, sample2, sample3, sample4, type = 'text')
 ```
 
 
