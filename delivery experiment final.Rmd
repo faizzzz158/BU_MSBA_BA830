@@ -176,7 +176,6 @@ cate_frequency_1 <- mean(data[frequency == 1& any_treatment == 1, avg_score])-me
 cate_frequency_0 <- mean(data[frequency == 0& any_treatment == 1, avg_score])-mean(data[frequency == 0& any_treatment == 0, avg_score])
 cat(cate_frequency_1,cate_frequency_0)
 ```
-Based on above summary, we can conclude that average treatment effect varies by users' previous order frequency. Users had high previous order frequency tended to pay more attention on food delivery time range. Those users were 16.4% more likely to place an order with a short range of delivery time than with a relatively long range. Users had low previous order frequency, however, didn't really seem take range of delivery time into account. 
 
 # Limitation
 Even though we tried to be as comprehensive as we could, this project still has some limitations.
@@ -186,6 +185,9 @@ To start with,  the questionnaire did not cover all possible types of diets such
 The combination of all order placement questions may lead to confusion which could fail to make respondents consider each question individually, and they may even didn’t notice the food type differences. Even worse,  the person may just pick favorite food cuisines and ignore the delivery time we set on purpose.
 
 Though this sampling method was efficient, some biases emerged when we recruited only people we know. First, the sample can't be representative of people of all ages. Second, we have a disproportionate number of participants who are students since we approached a lot of classmates. This might cause the external validity of our results and makes it difficult to apply our findings to a larger population. 
+
+# Conclusion
+Based on the above summary, we can conclude that the average treatment effect varies by users' previous order frequency. Users who had high previous order frequency tended to pay more attention to the food delivery time range. Those users were 16.4% more likely to place an order with a short range of delivery time than with a relatively long range. Users had low previous order frequency, however, didn't really seem to take the range of delivery time into account. 
 
 # Further research
 During our data analysis process, we realize that qualtrics automatically collect geographical information, so if we can distribute our samples on a larger scale, we may be able to check whether there are block-wise characteristics.
