@@ -2,8 +2,8 @@
 title: "delivery time experiment"
 author: "Yulong Gong, Tzuhua Huang, Chenzhi Pan, Muyan Xie, Yichi Zhang, Yangyang Zhou"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 # Introduction
 
@@ -165,6 +165,8 @@ cat(cate_chinese_1,cate_chinese_0)
 
 # Order Frequency
 Then we want to take a close look at people who order food more frequently. From the regression we notice that the difference between treatment group and control group for Chinese Food become statistically significant. One reasonable explanation would be part of our participants located in China, and delivery time range in China is more precise. Therefore, those part of people are more likely to order when the delivery time range is short. People who ordered food frequently are very time sensitive. They do not want to wait for a long time.
+
+Based on the above summary, we can conclude that the average treatment effect varies by users' previous order frequency. Users who had high previous order frequency tended to pay more attention to the food delivery time range. Those users were 16.4% more likely to place an order with a short range of delivery time than with a relatively long range. Users had low previous order frequency, however, didn't really seem to take the range of delivery time into account. 
 ```{r}
 #For people with higher order frequency
 reg9 <- feols(avg_score~any_treatment*frequency,data,se='white')
@@ -177,7 +179,7 @@ cat(cate_frequency_1,cate_frequency_0)
 ```
 
 # Conclusion
-Based on the above summary, we can conclude that the average treatment effect varies by users' previous order frequency. Users who had high previous order frequency tended to pay more attention to the food delivery time range. Those users were 16.4% more likely to place an order with a short range of delivery time than with a relatively long range. Users had low previous order frequency, however, didn't really seem to take the range of delivery time into account. 
+After performing a series of regression analyses, we finally obtain some results. By simply running a regression between different cuisines, two of all five cuisines have a statistically significant result at 90% confidence level which are fast food and pizza. Then, by noticing there is a large portion of Chinese cuisine selection according to our survey, we explored the heterogeneous effect on whether the respondent selected Chinese as their preferred or not. The result is that users who favor ordering Chinese cuisine are slightly more in favor of short delivery time interval estimates. Lastly we have regression for the heterogeneous effect regarding ordering frequency. Users who had high previous order frequency tended to pay more attention to food delivery time range. On the other hand, Users who had low previous order frequency didn't really seem to take range of delivery time into account. 
 
 # Limitation
 Even though we tried to be as comprehensive as we could, this project still has some limitations.
