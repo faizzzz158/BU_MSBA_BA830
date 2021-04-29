@@ -142,7 +142,6 @@ etable(reg2)
 Then, we dive deeper into the food categories. We would like to explore how does the delivery time range affect people's ordering decisions by different food categories. From the regressions below, we use all 91 participants data. We can see that for Fast Food and Italian Food (which is a pizzeria in our survey), the difference between treatment group (shorter delivery time range) and control group (longer delivery time range) is statistically significant at 90% confidence level. The result implies that people who order from a fast food restaurant or a pizzeria are more time sensitive. They want their delivery time range as short as possible. 
 ```{r}
 #For all surveys
-##===============================================MU YAN ====================================================
 reg3 <- feols(Japanese ~ any_treatment, data = data, se='white')
 reg4 <- feols(American ~ any_treatment, data = data, se='white')
 reg5 <- feols(Fast ~ any_treatment, data = data, se='white')
